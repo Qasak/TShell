@@ -276,8 +276,11 @@ void eval(char *cmdline)
             setpgid(0, 0);
             Sigprocmask(SIG_SETMASK, &prev_one, NULL);
             if (execve(argv[0], argv, environ)<0) {
-                printf("%s: Command not found.\n", argv[0]);
-                exit(0);
+                char s[MAXLINE]="/bin/";
+                if(execve(strcat(s, argv[0]), argv, environ)<0) {
+                    printf("%s: Command not found.\n", argv[0]);
+                    exit(0);
+                }
             }
         }
 	    /* Parent waits for foreground job to terminate */
